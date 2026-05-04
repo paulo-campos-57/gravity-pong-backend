@@ -5,7 +5,7 @@ const { PADDLE1_X, PADDLE2_X, TICK_INTERVAL, DEFAULT_MAX_SCORE } = require('./co
 class GameLoop {
   constructor({ gameId, players, maxScore, onStateUpdate, onGameOver, onLog }) {
     this.gameId = gameId;
-    this.players = players; // { player1: { socketId, name }, player2: { socketId, name } }
+    this.players = players;
     this.maxScore = maxScore || DEFAULT_MAX_SCORE;
     this.onStateUpdate = onStateUpdate;
     this.onGameOver = onGameOver;

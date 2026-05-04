@@ -20,7 +20,6 @@ class Ball {
     this.y = CANVAS_HEIGHT / 2;
     this.size = BALL_SIZE;
     this.speed = BALL_INITIAL_SPEED;
-    // Direção horizontal aleatória
     this.x_orientation = Math.random() < 0.5 ? 1 : -1;
     this.y_orientation = Math.random() < 0.5 ? 1 : -1;
     this.vx = this.speed * this.x_orientation;
@@ -31,7 +30,6 @@ class Ball {
     this.x += this.vx;
     this.y += this.vy;
 
-    // Colisão com paredes superior e inferior
     if (this.y <= 0) {
       this.y = 0;
       this.vy *= -1;
@@ -40,7 +38,6 @@ class Ball {
       this.vy *= -1;
     }
 
-    // Colisão com paddle1 (esquerda)
     if (
       this.x <= PADDLE1_X + PADDLE_WIDTH &&
       this.x >= PADDLE1_X &&
@@ -52,7 +49,6 @@ class Ball {
       this._adjustAngle(paddle1);
     }
 
-    // Colisão com paddle2 (direita)
     if (
       this.x + this.size >= PADDLE2_X &&
       this.x + this.size <= PADDLE2_X + PADDLE_WIDTH &&
@@ -72,11 +68,6 @@ class Ball {
     this.vy = diff * 0.15;
   }
 
-  /**
-   * Verifica se a bola saiu pela esquerda ou direita.
-   * Retorna 'player2' se saiu pela esquerda (ponto para player2),
-   * 'player1' se saiu pela direita, ou null se ainda está em jogo.
-   */
   checkScored() {
     if (this.x + this.size < 0) return 'player2';
     if (this.x > CANVAS_WIDTH) return 'player1';

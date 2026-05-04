@@ -12,7 +12,7 @@ class Paddle {
     this.width = PADDLE_WIDTH;
     this.height = PADDLE_HEIGHT;
     this.speed = PADDLE_SPEED;
-    this.direction = 'stop'; // 'up' | 'down' | 'stop'
+    this.direction = 'stop';
   }
 
   setDirection(direction) {
