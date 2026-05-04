@@ -1,0 +1,38 @@
+// Dimensões do canvas
+const CANVAS_WIDTH = 800;
+const CANVAS_HEIGHT = 500;
+
+// Raquetes
+const PADDLE_HEIGHT = 100;
+const PADDLE_WIDTH = 10;
+const PADDLE_SPEED = 6;
+const PADDLE1_X = 10;
+const PADDLE2_X = CANVAS_WIDTH - PADDLE_WIDTH - 10;
+
+// Bola
+const BALL_SIZE = 10;
+const BALL_INITIAL_SPEED = 5;
+const BALL_SPEED_INCREMENT = 0.3;
+
+// Loop do jogo
+const TICK_RATE = 60; // FPS
+const TICK_INTERVAL = Math.floor(1000 / TICK_RATE);
+
+// Pontuação padrão
+const DEFAULT_MAX_SCORE = 5;
+
+module.exports = {
+  CANVAS_WIDTH,
+  CANVAS_HEIGHT,
+  PADDLE_HEIGHT,
+  PADDLE_WIDTH,
+  PADDLE_SPEED,
+  PADDLE1_X,
+  PADDLE2_X,
+  BALL_SIZE,
+  BALL_INITIAL_SPEED,
+  BALL_SPEED_INCREMENT,
+  TICK_RATE,
+  TICK_INTERVAL,
+  DEFAULT_MAX_SCORE,
+};
