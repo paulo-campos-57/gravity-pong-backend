@@ -34,6 +34,26 @@ export default [
     },
 
     {
+        files: ['**/__tests__/**/*.js', '**/*.test.js', '**/*.spec.js'],
+        languageOptions: {
+            ecmaVersion: 'latest',
+            sourceType: 'commonjs',
+            globals: {
+                ...globals.node,
+                ...globals.jest,
+            },
+        },
+        rules: {
+            'no-unused-vars': ['warn', {
+                'argsIgnorePattern': '^_',
+                'varsIgnorePattern': '^_'
+            }],
+            'semi': ['error', 'always'],
+            'quotes': ['error', 'single'],
+        }
+    },
+
+    {
         files: ['*.mjs', 'eslint.config.mjs'],
         languageOptions: {
             sourceType: 'module',

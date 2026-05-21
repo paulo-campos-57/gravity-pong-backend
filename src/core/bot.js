@@ -1,5 +1,3 @@
-const { CANVAS_HEIGHT } = require('./constants');
-
 class Bot {
   constructor(paddle, ball) {
     this.paddle = paddle;
@@ -8,11 +6,9 @@ class Bot {
 
   update() {
     const paddleCenter = this.paddle.y + this.paddle.height / 2;
-    
-    // Pequena margem de erro (o bot só se move se a bola estiver a uma certa distância)
-    const deadzone = 15; 
 
-    // O bot tenta acompanhar o eixo Y da bola
+    const deadzone = 15;
+
     if (this.ball.y < paddleCenter - deadzone) {
       this.paddle.setDirection('up');
     } else if (this.ball.y > paddleCenter + deadzone) {

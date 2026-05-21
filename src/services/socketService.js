@@ -52,7 +52,7 @@ function initSocket(httpServer) {
       socket.join(gameId);
       socket.emit('game_created', { gameId, playerRole: 'player1' });
       socket.emit('game_joined', { gameId, playerRole: 'player1' }); // Força início no frontend
-      io.to(gameId).emit('game_log', `Partida Single Player iniciada! Enfrente a CPU.`);
+      io.to(gameId).emit('game_log', 'Partida Single Player iniciada! Enfrente a CPU.');
     });
 
     socket.on('join_game', (data) => {
