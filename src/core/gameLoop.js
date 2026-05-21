@@ -1,5 +1,5 @@
-const Ball = require('./Ball');
-const Paddle = require('./Paddle');
+const Ball = require('./ball');
+const Paddle = require('./paddle');
 const { PADDLE1_X, PADDLE2_X, TICK_INTERVAL, DEFAULT_MAX_SCORE } = require('./constants');
 
 class GameLoop {

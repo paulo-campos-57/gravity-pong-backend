@@ -1,4 +1,4 @@
-const GameLoop = require('../core/GameLoop');
+const GameLoop = require('../core/gameLoop');
 
 const games = new Map();
 let gameCounter = 0;

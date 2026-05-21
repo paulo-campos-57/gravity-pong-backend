@@ -1,13 +1,15 @@
-const express = require('express');
-const app = express();
-const port = 3000;
+const { createServer } = require('http');
+const app = require('./app');
+const { initSocket } = require('./services/socketService');
 
-app.use(express.json());
+const PORT = process.env.PORT || 3000;
 
-app.get('/', (req, res) => {
-	res.send('Servidor rodando corretamente');
-});
+const httpServer = createServer(app);
 
-app.listen(port, () => {
-	console.log(`Servidor rodando em localhost:${port}`);
+initSocket(httpServer);
+
+httpServer.listen(PORT, () => {
+  console.log(`Pong server running on port ${PORT}`);
+  console.log(`Health check: http://localhost:${PORT}/health`);
+  console.log(`API Docs:     http://localhost:${PORT}/api-docs`);
 });
