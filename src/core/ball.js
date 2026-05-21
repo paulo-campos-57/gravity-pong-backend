@@ -4,6 +4,8 @@ const {
   BALL_SIZE,
   BALL_INITIAL_SPEED,
   BALL_SPEED_INCREMENT,
+  BALL_MAX_SPEED,
+  GRAVITY_WELL_STRENGTH,
   PADDLE_WIDTH,
   PADDLE1_X,
   PADDLE2_X,
@@ -27,9 +29,31 @@ class Ball {
   }
 
   update(paddle1, paddle2) {
+    // ---- FÍSICA GRAVITY PONG (Buraco Negro no centro) ----
+    const centerX = CANVAS_WIDTH / 2;
+    const centerY = CANVAS_HEIGHT / 2;
+    const dx = centerX - this.x;
+    const dy = centerY - this.y;
+    const distance = Math.sqrt(dx * dx + dy * dy);
+
+    if (distance > 20) { // Evita forças infinitas no centro exato
+      const force = GRAVITY_WELL_STRENGTH / (distance * 0.05); // Suaviza a força
+      this.vx += (dx / distance) * force;
+      this.vy += (dy / distance) * force;
+    }
+
+    // Limite de velocidade para o jogo não quebrar
+    const currentSpeed = Math.sqrt(this.vx * this.vx + this.vy * this.vy);
+    if (currentSpeed > BALL_MAX_SPEED) {
+      this.vx = (this.vx / currentSpeed) * BALL_MAX_SPEED;
+      this.vy = (this.vy / currentSpeed) * BALL_MAX_SPEED;
+    }
+    // -------------------------------------------------------
+
     this.x += this.vx;
     this.y += this.vy;
 
+    // Colisão com teto e chão
     if (this.y <= 0) {
       this.y = 0;
       this.vy *= -1;
@@ -38,6 +62,7 @@ class Ball {
       this.vy *= -1;
     }
 
+    // Colisão Paddle 1
     if (
       this.x <= PADDLE1_X + PADDLE_WIDTH &&
       this.x >= PADDLE1_X &&
@@ -45,10 +70,12 @@ class Ball {
       this.y <= paddle1.y + PADDLE_HEIGHT
     ) {
       this.x = PADDLE1_X + PADDLE_WIDTH;
-      this.vx = Math.abs(this.vx) + BALL_SPEED_INCREMENT;
+      // Ao rebater, tira um pouco da influência gravitacional lateral forçando velocidade para frente
+      this.vx = Math.abs(this.vx) + BALL_SPEED_INCREMENT; 
       this._adjustAngle(paddle1);
     }
 
+    // Colisão Paddle 2
     if (
       this.x + this.size >= PADDLE2_X &&
       this.x + this.size <= PADDLE2_X + PADDLE_WIDTH &&

@@ -1,5 +1,6 @@
 const Ball = require('./ball');
 const Paddle = require('./paddle');
+const Bot = require('./bot');
 const { PADDLE1_X, PADDLE2_X, TICK_INTERVAL, DEFAULT_MAX_SCORE } = require('./constants');
 
 class GameLoop {
@@ -15,6 +16,9 @@ class GameLoop {
     this.paddle1 = new Paddle(PADDLE1_X);
     this.paddle2 = new Paddle(PADDLE2_X);
     this.ball = new Ball();
+
+    // Se o player2 for um Bot, instanciamos a IA controlando o paddle2
+    this.bot = this.players.player2?.isBot ? new Bot(this.paddle2, this.ball) : null;
 
     this.intervalId = null;
     this.running = false;
@@ -38,10 +42,12 @@ class GameLoop {
 
   movePaddle(role, direction) {
     if (role === 'player1') this.paddle1.setDirection(direction);
-    else if (role === 'player2') this.paddle2.setDirection(direction);
+    else if (role === 'player2' && !this.bot) this.paddle2.setDirection(direction);
   }
 
   _tick() {
+    if (this.bot) this.bot.update(); // Atualiza a IA do Bot antes de mover
+
     this.paddle1.update();
     this.paddle2.update();
     this.ball.update(this.paddle1, this.paddle2);

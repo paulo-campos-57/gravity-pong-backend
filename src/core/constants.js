@@ -10,6 +10,10 @@ const PADDLE2_X = CANVAS_WIDTH - PADDLE_WIDTH - 10;
 const BALL_SIZE = 10;
 const BALL_INITIAL_SPEED = 5;
 const BALL_SPEED_INCREMENT = 0.3;
+const BALL_MAX_SPEED = 15;
+
+// Nova constante para atração gravitacional para o centro da tela
+const GRAVITY_WELL_STRENGTH = 0.4; 
 
 const TICK_RATE = 60;
 const TICK_INTERVAL = Math.floor(1000 / TICK_RATE);
@@ -27,6 +31,8 @@ module.exports = {
   BALL_SIZE,
   BALL_INITIAL_SPEED,
   BALL_SPEED_INCREMENT,
+  BALL_MAX_SPEED,
+  GRAVITY_WELL_STRENGTH,
   TICK_RATE,
   TICK_INTERVAL,
   DEFAULT_MAX_SCORE,
