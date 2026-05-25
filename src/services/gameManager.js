@@ -10,9 +10,10 @@ function generateGameId() {
 
 function createGame({ socketId, playerName, maxScore }) {
   const gameId = generateGameId();
+
   games.set(gameId, {
     gameId,
-    status: 'waiting',
+    status: 'waiting', // 'waiting' | 'playing' | 'finished'
     maxScore,
     players: {
       player1: { socketId, name: playerName },
@@ -20,12 +21,13 @@ function createGame({ socketId, playerName, maxScore }) {
     },
     loop: null,
   });
+
   return gameId;
 }
 
-// NOVA FUNÇÃO: Cria a partida e já inicia com o bot
 function createSinglePlayerGame({ socketId, playerName, maxScore }, callbacks) {
   const gameId = generateGameId();
+  
   games.set(gameId, {
     gameId,
     status: 'playing',
@@ -51,12 +53,16 @@ function createSinglePlayerGame({ socketId, playerName, maxScore }, callbacks) {
     onLog: callbacks.onLog,
   });
 
-  game.loop.start();
+  setTimeout(() => {
+    if (games.has(gameId)) game.loop.start();
+  }, 0);
+
   return gameId;
 }
 
 function joinGame({ socketId, playerName, gameId }, callbacks) {
   const game = games.get(gameId);
+
   if (!game) return { success: false, error: 'Partida não encontrada.' };
   if (game.status !== 'waiting') return { success: false, error: 'Partida já em andamento ou encerrada.' };
   if (game.players.player2) return { success: false, error: 'Partida cheia.' };
@@ -76,7 +82,10 @@ function joinGame({ socketId, playerName, gameId }, callbacks) {
     onLog: callbacks.onLog,
   });
 
-  game.loop.start();
+  setTimeout(() => {
+    if (games.has(gameId)) game.loop.start();
+  }, 0);
+
   return { success: true, role: 'player2' };
 }
 
