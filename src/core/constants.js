@@ -12,8 +12,9 @@ const BALL_INITIAL_SPEED = 5;
 const BALL_SPEED_INCREMENT = 0.3;
 const BALL_MAX_SPEED = 15;
 
-// Nova constante para atração gravitacional para o centro da tela
-const GRAVITY_WELL_STRENGTH = 0.4; 
+// ---- NOVAS CONSTANTES DA GRAVIDADE ----
+const GRAVITY_WELL_STRENGTH = 0.3; // Força base menor
+const GRAVITY_RADIUS = 250; // Área de efeito (250px ao redor do centro)
 
 const TICK_RATE = 60;
 const TICK_INTERVAL = Math.floor(1000 / TICK_RATE);
@@ -33,6 +34,7 @@ module.exports = {
   BALL_SPEED_INCREMENT,
   BALL_MAX_SPEED,
   GRAVITY_WELL_STRENGTH,
+  GRAVITY_RADIUS,
   TICK_RATE,
   TICK_INTERVAL,
   DEFAULT_MAX_SCORE,

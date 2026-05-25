@@ -6,6 +6,7 @@ const {
   BALL_SPEED_INCREMENT,
   BALL_MAX_SPEED,
   GRAVITY_WELL_STRENGTH,
+  GRAVITY_RADIUS,
   PADDLE_WIDTH,
   PADDLE1_X,
   PADDLE2_X,
@@ -29,20 +30,30 @@ class Ball {
   }
 
   update(paddle1, paddle2) {
-    // ---- FÍSICA GRAVITY PONG (Buraco Negro no centro) ----
+    // ---- FÍSICA GRAVITY PONG (Buraco Negro Ajustado) ----
     const centerX = CANVAS_WIDTH / 2;
     const centerY = CANVAS_HEIGHT / 2;
     const dx = centerX - this.x;
     const dy = centerY - this.y;
     const distance = Math.sqrt(dx * dx + dy * dy);
 
-    if (distance > 20) { // Evita forças infinitas no centro exato
-      const force = GRAVITY_WELL_STRENGTH / (distance * 0.05); // Suaviza a força
+    // 1. Só aplica gravidade se a bola estiver dentro do GRAVITY_RADIUS
+    // e longe do centro absoluto (evita força infinita)
+    if (distance > 20 && distance < GRAVITY_RADIUS) {
+      // 2. A força diminui gradualmente quanto mais perto da borda do raio
+      const force = GRAVITY_WELL_STRENGTH * ((GRAVITY_RADIUS - distance) / GRAVITY_RADIUS);
       this.vx += (dx / distance) * force;
       this.vy += (dy / distance) * force;
     }
 
-    // Limite de velocidade para o jogo não quebrar
+    // 3. TRAVA ANTI-ÓRBITA (Segurança de Game Design)
+    // Garante que a bola nunca perca o impulso horizontal necessário para cruzar o campo
+    const MIN_X_SPEED = 3.5;
+    if (Math.abs(this.vx) < MIN_X_SPEED) {
+      this.vx = this.vx >= 0 ? MIN_X_SPEED : -MIN_X_SPEED;
+    }
+
+    // 4. Limite de velocidade máxima geral
     const currentSpeed = Math.sqrt(this.vx * this.vx + this.vy * this.vy);
     if (currentSpeed > BALL_MAX_SPEED) {
       this.vx = (this.vx / currentSpeed) * BALL_MAX_SPEED;
@@ -70,7 +81,6 @@ class Ball {
       this.y <= paddle1.y + PADDLE_HEIGHT
     ) {
       this.x = PADDLE1_X + PADDLE_WIDTH;
-      // Ao rebater, tira um pouco da influência gravitacional lateral forçando velocidade para frente
       this.vx = Math.abs(this.vx) + BALL_SPEED_INCREMENT; 
       this._adjustAngle(paddle1);
     }
