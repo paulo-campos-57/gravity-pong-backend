@@ -35,15 +35,14 @@ function initSocket(httpServer) {
         socket.emit('game_error', error);
         return;
       }
-      const { playerName, maxScore } = data;
+      const { playerName, maxScore, stage } = data; // Extrai a fase enviada
       
       const gameId = gameManager.createSinglePlayerGame(
-        { socketId: socket.id, playerName, maxScore },
+        { socketId: socket.id, playerName, maxScore, stage: stage || 1 },
         {
           onStateUpdate: (state) => io.to(gameId).emit('game_state', state),
           onGameOver: ({ winner, scores }) => {
             io.to(gameId).emit('game_over', { winner, scores });
-            io.to(gameId).emit('game_log', `Fim de jogo! Vencedor: ${winner}`);
           },
           onLog: (msg) => io.to(gameId).emit('game_log', msg),
         }
@@ -51,8 +50,7 @@ function initSocket(httpServer) {
 
       socket.join(gameId);
       socket.emit('game_created', { gameId, playerRole: 'player1' });
-      socket.emit('game_joined', { gameId, playerRole: 'player1' }); // Força início no frontend
-      io.to(gameId).emit('game_log', 'Partida Single Player iniciada! Enfrente a CPU.');
+      socket.emit('game_joined', { gameId, playerRole: 'player1' });
     });
 
     socket.on('join_game', (data) => {

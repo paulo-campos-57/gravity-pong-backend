@@ -29,42 +29,51 @@ class Ball {
     this.vy = this.speed * this.y_orientation;
   }
 
-  update(paddle1, paddle2) {
-    // ---- FÍSICA GRAVITY PONG (Buraco Negro Ajustado) ----
+  update(paddle1, paddle2, stage = 1) {
+    // ---- POWER-UPS / MODIFICADORES DA TORRE ----
+    let gravityStrength = GRAVITY_WELL_STRENGTH;
+    let maxSpeed = BALL_MAX_SPEED;
+    let speedIncrement = BALL_SPEED_INCREMENT;
+
+    if (stage === 2) {
+      // Fase Amarela: Aceleração mais agressiva ao rebater
+      speedIncrement = BALL_SPEED_INCREMENT * 2;
+    } else if (stage === 3) {
+      // Fase Vermelha: Anomalia Gravitacional (Buraco Negro muito mais forte)
+      gravityStrength = GRAVITY_WELL_STRENGTH * 2.2;
+    } else if (stage === 4) {
+      // Fase Roxa (Boss): Velocidade limite insana + Alta gravidade
+      maxSpeed = BALL_MAX_SPEED * 1.4;
+      gravityStrength = GRAVITY_WELL_STRENGTH * 1.6;
+    }
+
     const centerX = CANVAS_WIDTH / 2;
     const centerY = CANVAS_HEIGHT / 2;
     const dx = centerX - this.x;
     const dy = centerY - this.y;
     const distance = Math.sqrt(dx * dx + dy * dy);
 
-    // 1. Só aplica gravidade se a bola estiver dentro do GRAVITY_RADIUS
-    // e longe do centro absoluto (evita força infinita)
     if (distance > 20 && distance < GRAVITY_RADIUS) {
-      // 2. A força diminui gradualmente quanto mais perto da borda do raio
-      const force = GRAVITY_WELL_STRENGTH * ((GRAVITY_RADIUS - distance) / GRAVITY_RADIUS);
+      const force = gravityStrength * ((GRAVITY_RADIUS - distance) / GRAVITY_RADIUS);
       this.vx += (dx / distance) * force;
       this.vy += (dy / distance) * force;
     }
 
-    // 3. TRAVA ANTI-ÓRBITA (Segurança de Game Design)
-    // Garante que a bola nunca perca o impulso horizontal necessário para cruzar o campo
     const MIN_X_SPEED = 3.5;
     if (Math.abs(this.vx) < MIN_X_SPEED) {
       this.vx = this.vx >= 0 ? MIN_X_SPEED : -MIN_X_SPEED;
     }
 
-    // 4. Limite de velocidade máxima geral
     const currentSpeed = Math.sqrt(this.vx * this.vx + this.vy * this.vy);
-    if (currentSpeed > BALL_MAX_SPEED) {
-      this.vx = (this.vx / currentSpeed) * BALL_MAX_SPEED;
-      this.vy = (this.vy / currentSpeed) * BALL_MAX_SPEED;
+    if (currentSpeed > maxSpeed) {
+      this.vx = (this.vx / currentSpeed) * maxSpeed;
+      this.vy = (this.vy / currentSpeed) * maxSpeed;
     }
-    // -------------------------------------------------------
 
     this.x += this.vx;
     this.y += this.vy;
 
-    // Colisão com teto e chão
+    // Colisões com teto/chão
     if (this.y <= 0) {
       this.y = 0;
       this.vy *= -1;
@@ -81,7 +90,7 @@ class Ball {
       this.y <= paddle1.y + PADDLE_HEIGHT
     ) {
       this.x = PADDLE1_X + PADDLE_WIDTH;
-      this.vx = Math.abs(this.vx) + BALL_SPEED_INCREMENT; 
+      this.vx = Math.abs(this.vx) + speedIncrement; 
       this._adjustAngle(paddle1);
     }
 
@@ -93,7 +102,7 @@ class Ball {
       this.y <= paddle2.y + PADDLE_HEIGHT
     ) {
       this.x = PADDLE2_X - this.size;
-      this.vx = -(Math.abs(this.vx) + BALL_SPEED_INCREMENT);
+      this.vx = -(Math.abs(this.vx) + speedIncrement);
       this._adjustAngle(paddle2);
     }
   }
@@ -112,11 +121,7 @@ class Ball {
   }
 
   getState() {
-    return {
-      x: Math.round(this.x),
-      y: Math.round(this.y),
-      size: this.size,
-    };
+    return { x: Math.round(this.x), y: Math.round(this.y), size: this.size };
   }
 }
 

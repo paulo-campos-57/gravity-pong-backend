@@ -1,18 +1,27 @@
 class Bot {
-  constructor(paddle, ball) {
+  constructor(paddle, ball, stage = 1) {
     this.paddle = paddle;
     this.ball = ball;
+    this.stage = stage;
+
+    // DIFICULDADE GRADUAL:
+    // Reduz a deadzone (margem de erro de reação) a cada nível
+    this.deadzone = Math.max(2, 20 - stage * 4.5); 
+    
+    // Multiplicador de velocidade para acompanhar bolas mais velozes
+    this.speedModifier = 0.7 + stage * 0.2; 
   }
 
   update() {
     const paddleCenter = this.paddle.y + this.paddle.height / 2;
-
-    const deadzone = 15;
-
-    if (this.ball.y < paddleCenter - deadzone) {
+    
+    // O bot foca no eixo Y central da bolinha
+    if (this.ball.y < paddleCenter - this.deadzone) {
       this.paddle.setDirection('up');
-    } else if (this.ball.y > paddleCenter + deadzone) {
+      this.paddle.speed = 6 * this.speedModifier;
+    } else if (this.ball.y > paddleCenter + this.deadzone) {
       this.paddle.setDirection('down');
+      this.paddle.speed = 6 * this.speedModifier;
     } else {
       this.paddle.setDirection('stop');
     }

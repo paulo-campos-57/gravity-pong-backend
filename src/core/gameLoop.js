@@ -17,8 +17,17 @@ class GameLoop {
     this.paddle2 = new Paddle(PADDLE2_X);
     this.ball = new Ball();
 
-    // Se o player2 for um Bot, instanciamos a IA controlando o paddle2
-    this.bot = this.players.player2?.isBot ? new Bot(this.paddle2, this.ball) : null;
+    // Mapeamento de cores da torre MK de acordo com a dificuldade
+    this.stage = players.player2?.stage || 1;
+    const stageColors = {
+      1: '#22c55e', // Verde (Fácil)
+      2: '#eab308', // Amarelo (Médio)
+      3: '#ef4444', // Vermelho (Difícil)
+      4: '#a855f7'  // Roxo (Boss / Impossível)
+    };
+    this.enemyColor = stageColors[this.stage] || '#22c55e';
+
+    this.bot = this.players.player2?.isBot ? new Bot(this.paddle2, this.ball, this.stage) : null;
 
     this.intervalId = null;
     this.running = false;
@@ -27,8 +36,6 @@ class GameLoop {
   start() {
     if (this.running) return;
     this.running = true;
-    this.onLog?.(`Partida ${this.gameId} iniciada!`);
-
     this.intervalId = setInterval(() => this._tick(), TICK_INTERVAL);
   }
 
@@ -46,17 +53,17 @@ class GameLoop {
   }
 
   _tick() {
-    if (this.bot) this.bot.update(); // Atualiza a IA do Bot antes de mover
+    if (this.bot) this.bot.update();
 
     this.paddle1.update();
     this.paddle2.update();
-    this.ball.update(this.paddle1, this.paddle2);
+    
+    // Repassa o nível atual da torre para ajustar a dinâmica da bola
+    this.ball.update(this.paddle1, this.paddle2, this.stage);
 
     const scorer = this.ball.checkScored();
     if (scorer) {
       this.scores[scorer]++;
-      this.onLog?.(`Ponto para ${scorer}! Placar: ${this.scores.player1} x ${this.scores.player2}`);
-
       if (this.scores[scorer] >= this.maxScore) {
         this.stop();
         const winnerName = this.players[scorer]?.name || scorer;
@@ -74,6 +81,8 @@ class GameLoop {
       ball: this.ball.getState(),
       paddle1: this.paddle1.getState(),
       paddle2: this.paddle2.getState(),
+      enemyColor: this.enemyColor, // Envia a cor dinâmica para renderização do canvas
+      stage: this.stage,
       scores: { ...this.scores },
       players: {
         player1: this.players.player1?.name || 'Player 1',

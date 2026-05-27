@@ -25,7 +25,7 @@ function createGame({ socketId, playerName, maxScore }) {
   return gameId;
 }
 
-function createSinglePlayerGame({ socketId, playerName, maxScore }, callbacks) {
+function createSinglePlayerGame({ socketId, playerName, maxScore, stage }, callbacks) {
   const gameId = generateGameId();
   
   games.set(gameId, {
@@ -34,7 +34,12 @@ function createSinglePlayerGame({ socketId, playerName, maxScore }, callbacks) {
     maxScore,
     players: {
       player1: { socketId, name: playerName },
-      player2: { socketId: 'cpu_bot', name: 'CPU (Bot)', isBot: true },
+      player2: { 
+        socketId: 'cpu_bot', 
+        name: `Bot Nível ${stage}`, 
+        isBot: true,
+        stage: stage // Injeta a fase selecionada aqui
+      },
     },
     loop: null,
   });
