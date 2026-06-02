@@ -13,7 +13,7 @@ function createGame({ socketId, playerName, maxScore }) {
 
   games.set(gameId, {
     gameId,
-    status: 'waiting', // 'waiting' | 'playing' | 'finished'
+    status: 'waiting', 
     maxScore,
     players: {
       player1: { socketId, name: playerName },
@@ -27,18 +27,26 @@ function createGame({ socketId, playerName, maxScore }) {
 
 function createSinglePlayerGame({ socketId, playerName, maxScore, stage }, callbacks) {
   const gameId = generateGameId();
-  
+
+  const enemyNames = {
+    1: "VANGUARDA VERDE",
+    2: "CRUZADOR SOLAR",
+    3: "FROTA CARMESIM",
+    4: "ANOMALIA SUPREMA"
+  };
+  const botName = enemyNames[stage] || `Invasor Nível ${stage}`;
+
   games.set(gameId, {
     gameId,
     status: 'playing',
     maxScore,
     players: {
       player1: { socketId, name: playerName },
-      player2: { 
-        socketId: 'cpu_bot', 
-        name: `Bot Nível ${stage}`, 
+      player2: {
+        socketId: 'cpu_bot',
+        name: botName,
         isBot: true,
-        stage: stage // Injeta a fase selecionada aqui
+        stage: stage
       },
     },
     loop: null,
