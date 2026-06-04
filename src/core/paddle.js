@@ -5,6 +5,48 @@ const {
   PADDLE_SPEED,
 } = require('./constants');
 
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Paddle:
+ *       type: object
+ *       properties:
+ *         x:
+ *           type: number
+ *           description: Posição X fixa do paddle
+ *         y:
+ *           type: number
+ *           description: Posição Y atual do paddle
+ *         width:
+ *           type: number
+ *           description: Largura do paddle
+ *         height:
+ *           type: number
+ *           description: Altura do paddle
+ *         speed:
+ *           type: number
+ *           description: Velocidade base de movimento do paddle
+ *         direction:
+ *           type: string
+ *           enum: [up, down, stop]
+ *           description: Direção atual de movimento do paddle
+ *     PaddleState:
+ *       type: object
+ *       properties:
+ *         x:
+ *           type: integer
+ *           description: Posição X do paddle
+ *         y:
+ *           type: integer
+ *           description: Posição Y arredondada do paddle
+ *         width:
+ *           type: integer
+ *           description: Largura do paddle
+ *         height:
+ *           type: integer
+ *           description: Altura do paddle
+ */
 class Paddle {
   constructor(x) {
     this.x = x;

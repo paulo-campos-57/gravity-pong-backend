@@ -1,3 +1,20 @@
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Bot:
+ *       type: object
+ *       properties:
+ *         deadzone:
+ *           type: number
+ *           description: Margem de erro de reação (reduz com a dificuldade da fase)
+ *         speedModifier:
+ *           type: number
+ *           description: Multiplicador de velocidade para acompanhar bolas mais rápidas
+ *         stage:
+ *           type: integer
+ *           description: Nível de dificuldade da fase do bot (1 a 4)
+ */
 class Bot {
   constructor(paddle, ball, stage = 1) {
     this.paddle = paddle;

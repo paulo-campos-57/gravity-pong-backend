@@ -13,6 +13,52 @@ const {
   PADDLE_HEIGHT,
 } = require('./constants');
 
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Ball:
+ *       type: object
+ *       properties:
+ *         x:
+ *           type: number
+ *           description: Posição X da bola no canvas
+ *         y:
+ *           type: number
+ *           description: Posição Y da bola no canvas
+ *         size:
+ *           type: number
+ *           description: Diâmetro/tamanho da bola
+ *         speed:
+ *           type: number
+ *           description: Velocidade atual da bola
+ *         x_orientation:
+ *           type: number
+ *           enum: [1, -1]
+ *           description: Orientação horizontal (1 para direita, -1 para esquerda)
+ *         y_orientation:
+ *           type: number
+ *           enum: [1, -1]
+ *           description: Orientação vertical (1 para baixo, -1 para cima)
+ *         vx:
+ *           type: number
+ *           description: Velocidade vetorial no eixo X
+ *         vy:
+ *           type: number
+ *           description: Velocidade vetorial no eixo Y
+ *     BallState:
+ *       type: object
+ *       properties:
+ *         x:
+ *           type: integer
+ *           description: Posição X arredondada da bola
+ *         y:
+ *           type: integer
+ *           description: Posição Y arredondada da bola
+ *         size:
+ *           type: integer
+ *           description: Tamanho da bola
+ */
 class Ball {
   constructor() {
     this.reset();

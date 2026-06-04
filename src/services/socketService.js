@@ -3,6 +3,88 @@ const { socketCorsOptions } = require('../config/corsConfig');
 const { validateCreateGame, validateJoinGame, validateMovePaddle } = require('../middlewares/validateMiddleware');
 const gameManager = require('./gameManager');
 
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     SocketCreateGamePayload:
+ *       type: object
+ *       required:
+ *         - playerName
+ *       properties:
+ *         playerName:
+ *           type: string
+ *           description: Nome do criador do jogo
+ *         maxScore:
+ *           type: integer
+ *           description: Pontuação limite da partida (padrão é 5)
+ *     SocketCreateSinglePlayerPayload:
+ *       type: object
+ *       required:
+ *         - playerName
+ *       properties:
+ *         playerName:
+ *           type: string
+ *           description: Nome do jogador
+ *         maxScore:
+ *           type: integer
+ *           description: Pontuação limite da partida (padrão é 5)
+ *         stage:
+ *           type: integer
+ *           description: Fase inicial do bot de 1 (Fácil) a 4 (Boss)
+ *     SocketJoinGamePayload:
+ *       type: object
+ *       required:
+ *         - playerName
+ *         - gameId
+ *       properties:
+ *         playerName:
+ *           type: string
+ *           description: Nome do jogador que quer se juntar
+ *         gameId:
+ *           type: string
+ *           description: ID da partida que deseja entrar
+ *     SocketMovePaddlePayload:
+ *       type: object
+ *       required:
+ *         - gameId
+ *         - direction
+ *       properties:
+ *         gameId:
+ *           type: string
+ *           description: ID da partida ativa
+ *         direction:
+ *           type: string
+ *           enum: [up, down, stop]
+ *           description: Direção de movimento do paddle do jogador
+ *     SocketGameCreatedResponse:
+ *       type: object
+ *       properties:
+ *         gameId:
+ *           type: string
+ *           description: ID da partida criada
+ *         playerRole:
+ *           type: string
+ *           enum: [player1, player2]
+ *           description: Papel atribuído ao criador (geralmente player1)
+ *     SocketGameJoinedResponse:
+ *       type: object
+ *       properties:
+ *         gameId:
+ *           type: string
+ *           description: ID da partida em que o jogador entrou
+ *         playerRole:
+ *           type: string
+ *           enum: [player1, player2]
+ *           description: Papel atribuído ao jogador
+ *     SocketGameErrorResponse:
+ *       type: object
+ *       properties:
+ *         error:
+ *           type: string
+ *           description: Mensagem descritiva do erro ocorrido
+ */
+
 let io;
 
 function initSocket(httpServer) {

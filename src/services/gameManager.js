@@ -1,5 +1,51 @@
 const GameLoop = require('../core/gameLoop');
 
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Game:
+ *       type: object
+ *       properties:
+ *         gameId:
+ *           type: string
+ *           description: Identificador único da partida
+ *         status:
+ *           type: string
+ *           enum: [waiting, playing, finished]
+ *           description: Estado atual da partida
+ *         maxScore:
+ *           type: integer
+ *           description: Limite de pontos para vitória
+ *         players:
+ *           type: object
+ *           properties:
+ *             player1:
+ *               $ref: '#/components/schemas/GamePlayer'
+ *             player2:
+ *               $ref: '#/components/schemas/GamePlayer'
+ *         loop:
+ *           type: object
+ *           nullable: true
+ *           description: Instância ativa do GameLoop (apenas quando em andamento)
+ *     GamePlayer:
+ *       type: object
+ *       nullable: true
+ *       properties:
+ *         socketId:
+ *           type: string
+ *           description: ID do socket associado ao jogador (ou 'cpu_bot' se for IA)
+ *         name:
+ *           type: string
+ *           description: Nome do jogador
+ *         isBot:
+ *           type: boolean
+ *           description: Indica se o jogador é controlado por computador (IA)
+ *         stage:
+ *           type: integer
+ *           description: Caso seja um bot, representa a dificuldade/fase (1 a 4)
+ */
+
 const games = new Map();
 let gameCounter = 0;
 
@@ -29,10 +75,10 @@ function createSinglePlayerGame({ socketId, playerName, maxScore, stage }, callb
   const gameId = generateGameId();
 
   const enemyNames = {
-    1: "VANGUARDA VERDE",
-    2: "CRUZADOR SOLAR",
-    3: "FROTA CARMESIM",
-    4: "ANOMALIA SUPREMA"
+    1: 'VANGUARDA VERDE',
+    2: 'CRUZADOR SOLAR',
+    3: 'FROTA CARMESIM',
+    4: 'ANOMALIA SUPREMA'
   };
   const botName = enemyNames[stage] || `Invasor Nível ${stage}`;
 

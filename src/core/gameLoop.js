@@ -3,6 +3,59 @@ const Paddle = require('./paddle');
 const Bot = require('./bot');
 const { PADDLE1_X, PADDLE2_X, TICK_INTERVAL, DEFAULT_MAX_SCORE } = require('./constants');
 
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     GameState:
+ *       type: object
+ *       properties:
+ *         ball:
+ *           $ref: '#/components/schemas/BallState'
+ *           description: Estado atual da bola
+ *         paddle1:
+ *           $ref: '#/components/schemas/PaddleState'
+ *           description: Estado do paddle do jogador 1
+ *         paddle2:
+ *           $ref: '#/components/schemas/PaddleState'
+ *           description: Estado do paddle do jogador 2
+ *         enemyColor:
+ *           type: string
+ *           description: Cor da torre (fase atual da partida)
+ *         stage:
+ *           type: integer
+ *           description: Dificuldade/fase atual da partida (1 a 4)
+ *         scores:
+ *           type: object
+ *           properties:
+ *             player1:
+ *               type: integer
+ *               description: Pontuação do jogador 1
+ *             player2:
+ *               type: integer
+ *               description: Pontuação do jogador 2
+ *         players:
+ *           type: object
+ *           properties:
+ *             player1:
+ *               type: string
+ *               description: Nome do jogador 1
+ *             player2:
+ *               type: string
+ *               description: Nome do jogador 2
+ *     GameConfig:
+ *       type: object
+ *       properties:
+ *         gameId:
+ *           type: string
+ *           description: Identificador único da partida
+ *         maxScore:
+ *           type: integer
+ *           description: Pontuação máxima para vencer a partida
+ *         stage:
+ *           type: integer
+ *           description: Fase inicial da partida (1 a 4)
+ */
 class GameLoop {
   constructor({ gameId, players, maxScore, onStateUpdate, onGameOver, onLog }) {
     this.gameId = gameId;
