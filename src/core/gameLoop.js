@@ -70,13 +70,12 @@ class GameLoop {
     this.paddle2 = new Paddle(PADDLE2_X);
     this.ball = new Ball();
 
-    // Mapeamento de cores da torre MK de acordo com a dificuldade
     this.stage = players.player2?.stage || 1;
     const stageColors = {
-      1: '#22c55e', // Verde (Fácil)
-      2: '#eab308', // Amarelo (Médio)
-      3: '#ef4444', // Vermelho (Difícil)
-      4: '#a855f7'  // Roxo (Boss / Impossível)
+      1: '#22c55e',
+      2: '#eab308',
+      3: '#ef4444',
+      4: '#a855f7'
     };
     this.enemyColor = stageColors[this.stage] || '#22c55e';
 
@@ -84,6 +83,7 @@ class GameLoop {
 
     this.intervalId = null;
     this.running = false;
+    this.isPaused = false;
   }
 
   start() {
@@ -106,12 +106,13 @@ class GameLoop {
   }
 
   _tick() {
+    if (this.isPaused) return;
+    
     if (this.bot) this.bot.update();
 
     this.paddle1.update();
     this.paddle2.update();
     
-    // Repassa o nível atual da torre para ajustar a dinâmica da bola
     this.ball.update(this.paddle1, this.paddle2, this.stage);
 
     const scorer = this.ball.checkScored();
@@ -134,7 +135,7 @@ class GameLoop {
       ball: this.ball.getState(),
       paddle1: this.paddle1.getState(),
       paddle2: this.paddle2.getState(),
-      enemyColor: this.enemyColor, // Envia a cor dinâmica para renderização do canvas
+      enemyColor: this.enemyColor,
       stage: this.stage,
       scores: { ...this.scores },
       players: {

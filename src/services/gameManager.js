@@ -59,7 +59,7 @@ function createGame({ socketId, playerName, maxScore }) {
 
   games.set(gameId, {
     gameId,
-    status: 'waiting', 
+    status: 'waiting',
     maxScore,
     players: {
       player1: { socketId, name: playerName },
@@ -191,6 +191,13 @@ function getRoleInGame(gameId, socketId) {
   return null;
 }
 
+function togglePause(gameId) {
+  const game = games.get(gameId);
+  if (game && game.loop) {
+    game.loop.isPaused = !game.loop.isPaused;
+  }
+}
+
 module.exports = {
   createGame,
   createSinglePlayerGame,
@@ -199,4 +206,5 @@ module.exports = {
   handleDisconnect,
   getActiveGames,
   getRoleInGame,
+  togglePause,
 };
