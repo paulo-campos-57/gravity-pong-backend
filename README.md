@@ -131,10 +131,6 @@ npm run test
   </p>
 </div>
 
-Este repositório contém o Back-End do Trabalho de Conclusão de Curso (TCC) em Ciência da Computação de **Gabriel Simoes Rossiter** na CESAR School.<br>
-Ele atua como o motor de física e multiplayer do **Gravity Pong**, gerenciando conexões em tempo real (WebSockets), lógica de anomalia gravitacional (Buraco Negro) e a Inteligência Artificial dos bots.
-
----
 
 ## Estrutura do Projeto
 
