@@ -12,10 +12,6 @@
   </p>
 </div>
 
-This repository contains the Back-End of **Gabriel Simoes Rossiter**'s Final Graduation Project (TCC) in Computer Science at CESAR School.<br>
-It serves as the physics and multiplayer engine for **Gravity Pong**, handling real-time WebSockets, gravitational anomaly logic, and CPU Bots.
-
----
 
 ## Project Structure
 
